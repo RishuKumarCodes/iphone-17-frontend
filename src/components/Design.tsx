@@ -114,7 +114,7 @@ const IPhoneConfigurator: React.FC = () => {
         white: "white.jpg",
         black: "black.jpg",
       };
-      return `/public/design/iphone_colors/${
+      return `/design/iphone_colors/${
         colorMap[color as keyof typeof colorMap]
       }`;
     }
@@ -127,7 +127,7 @@ const IPhoneConfigurator: React.FC = () => {
       "dynamic-active": "dynamic_island.jpg",
     };
 
-    return `/public/design/${
+    return `/design/${
       optionMap[option as keyof typeof optionMap] ||
       "iphone_colors/lavendar.jpg"
     }`;
