@@ -5,6 +5,7 @@ import CameraSection from "./components/Camera";
 import DesignSection from "./components/Design";
 import Footer from "./components/Footer";
 import Preloader from "./components/Preloader";
+import Display from "./components/Display";
 
 const iPhone17Website: React.FC = () => {
   return (
@@ -15,9 +16,10 @@ const iPhone17Website: React.FC = () => {
         <Navigation />
         <Preloader />
         <HeroSection />
+        <Display/>
+        <DesignSection />
         <FeaturesSection />
         <CameraSection />
-        <DesignSection />
         <Footer />
       </div>
     </>
