@@ -1,11 +1,11 @@
 import HeroSection from "./components/Hero";
-import FeaturesSection from "./components/Features";
 import Navigation from "./components/Navbar";
 import CameraSection from "./components/Camera";
 import DesignSection from "./components/Design";
 import Footer from "./components/Footer";
 import Preloader from "./components/Preloader";
 import Display from "./components/Display";
+import A19Chip from "./components/A19Chip";
 
 const iPhone17Website: React.FC = () => {
   return (
@@ -16,10 +16,10 @@ const iPhone17Website: React.FC = () => {
         <Navigation />
         <Preloader />
         <HeroSection />
-        <Display/>
+        <Display />
         <DesignSection />
-        <FeaturesSection />
         <CameraSection />
+        <A19Chip />
         <Footer />
       </div>
     </>

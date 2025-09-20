@@ -103,9 +103,7 @@ const IPhoneConfigurator: React.FC = () => {
     );
   };
 
-  // Image paths - using your actual file structure
   const getImagePath = (color: string, option: string) => {
-    // For color changes, use the color images
     if (option === "default" || option.includes("color")) {
       const colorMap = {
         lavender: "lavendar.jpg",
@@ -136,7 +134,6 @@ const IPhoneConfigurator: React.FC = () => {
   const handleColorChange = (colorName: string) => {
     if (selectedColor === colorName) return;
 
-    // Fade effect for color change
     if (imageRef.current) {
       gsap.to(imageRef.current, {
         opacity: 0,
@@ -157,7 +154,6 @@ const IPhoneConfigurator: React.FC = () => {
   const handleOptionChange = (sectionId: string) => {
     if (sectionId === "colors") return;
 
-    // Generate new option based on section
     const newOption =
       sectionId === "camera"
         ? "camera-focused"
@@ -201,7 +197,6 @@ const IPhoneConfigurator: React.FC = () => {
     if (!section) return;
 
     if (expandedSection === sectionId) {
-      // Collapse
       gsap.to(section.querySelector(".section-content"), {
         height: 0,
         opacity: 0,
@@ -210,7 +205,6 @@ const IPhoneConfigurator: React.FC = () => {
       });
       setExpandedSection(null);
     } else {
-      // Collapse any open section first
       if (expandedSection) {
         const openSection = sectionsRef.current[expandedSection];
         if (openSection) {
@@ -239,8 +233,13 @@ const IPhoneConfigurator: React.FC = () => {
       }
       setExpandedSection(sectionId);
 
-      // Trigger option change with swipe animation
-      handleOptionChange(sectionId);
+      // Reset selectedOption when going back to colors
+      if (sectionId === "colors") {
+        setSelectedOption("default");
+      } else {
+        // Trigger option change with swipe animation
+        handleOptionChange(sectionId);
+      }
     }
 
     // Update config sections
@@ -253,7 +252,6 @@ const IPhoneConfigurator: React.FC = () => {
   };
 
   useEffect(() => {
-    // Initial animation
     if (imageRef.current) {
       gsap.fromTo(
         imageRef.current,
@@ -262,10 +260,8 @@ const IPhoneConfigurator: React.FC = () => {
       );
     }
 
-    // Animate sections on load
     Object.values(sectionsRef.current).forEach((section, index) => {
       if (section) {
-        // Ensure all sections start closed
         const content = section.querySelector(".section-content");
         if (content) {
           gsap.set(content, { height: 0, opacity: 0 });
@@ -287,12 +283,12 @@ const IPhoneConfigurator: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8 mt-40 md:mt-60">
+    <div className="min-h-screen bg-white p-4 md:p-8 mt-40 md:mt-60">
       <div className="max-w-7xl mx-auto">
         <div className="max-w-4xl mb-8">
           <p className="!text-2xl font-bold mb-4 text-gray-900">Design.</p>
           <p className="text-5xl lg:text-6xl font-bold leading-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-blue-400 to-green-500">
-            Even more delightful. Even more durable.
+            Even more delightful. <br /> Even more durable.
           </p>
           <p className="text-gray-500 font-semibold text-lg lg:text-md leading-relaxed">
             Meet the new iPhone 17. Designed with contoured edges, thinner
@@ -306,91 +302,53 @@ const IPhoneConfigurator: React.FC = () => {
             , with an adaptive refresh rate up to 120Hz. Take it for a spin.
           </p>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mt-20">
-          {/* Left Panel - Configuration */}
-          <div className="space-y-6 w-fit">
-            <button className="absolute top-4 right-4 lg:hidden text-gray-500 hover:text-gray-700">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+        <div className="relative flex flex-col lg:flex-row justify-evenly gap-8 lg:gap-12 mt-20">
+          {/* Left Panel */}
+          <div className="space-y-3 w-sm lg:absolute top-0 left-0 h-full z-50">
+            {configSections.map((section) => (
+              <div
+                key={section.id}
+                ref={(el) => (sectionsRef.current[section.id] = el)}
+                className="bg-gray-200 rounded-2xl overflow-hidden"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-
-            {/* Color Selection */}
-            <div className="space-y-3">
-              {configSections.map((section) => (
                 <div
-                  key={section.id}
-                  ref={(el) => (sectionsRef.current[section.id] = el)}
-                  className="bg-white rounded-2xl shadow-sm overflow-hidden"
+                  onClick={() => toggleSection(section.id)}
+                  className="w-full p-4 text-left flex items-center justify-between bg-gray-200 transition-colors duration-200 font-semibold"
                 >
-                  <button
-                    onClick={() => toggleSection(section.id)}
-                    className="w-full p-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200"
-                  >
-                    <div className="flex items-center space-x-3 flex-1">
-                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg
-                          className="w-4 h-4 text-gray-600"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                          />
-                        </svg>
-                      </div>
-                      <span className="font-medium text-gray-900 leading-tight">
-                        {getSectionContent(section.id, true).collapsed}
-                      </span>
-                    </div>
-                  </button>
+                  {getSectionContent(section.id, true).collapsed}
+                </div>
 
-                  <div className="section-content overflow-hidden">
-                    <div className="p-4 pt-0">
-                      {section.id === "colors" ? (
-                        <div className="flex space-x-4">
-                          {colorOptions.map((color) => (
-                            <button
-                              key={color.name}
-                              onClick={() => handleColorChange(color.name)}
-                              className={`w-12 h-12 rounded-full border-4 transition-all duration-300 hover:scale-110 ${
-                                selectedColor === color.name
-                                  ? "border-blue-500 shadow-lg"
-                                  : "border-gray-300"
-                              }`}
-                              style={{ backgroundColor: color.color }}
-                              aria-label={`Select ${color.name} color`}
-                            />
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-gray-600 text-sm leading-relaxed">
-                          {getSectionContent(section.id, true).expanded}
-                        </p>
-                      )}
-                    </div>
+                <div className="section-content overflow-hidden bg-gray-200">
+                  <div className="p-4 pt-0">
+                    {section.id === "colors" ? (
+                      <div className="flex space-x-4">
+                        {colorOptions.map((color) => (
+                          <button
+                            key={color.name}
+                            onClick={() => handleColorChange(color.name)}
+                            className={`w-12 h-12 mt-4 rounded-full border-4 transition-all duration-300 ${
+                              selectedColor === color.name
+                                ? "border-black shadow-lg"
+                                : "border-gray-300"
+                            }`}
+                            style={{ backgroundColor: color.color }}
+                            aria-label={`Select ${color.name} color`}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        {getSectionContent(section.id, true).expanded}
+                      </p>
+                    )}
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
 
-          {/* Right Panel - Phone Display */}
-          <div className="flex items-center justify-center h-[500px]">
+          {/* Right Panel*/}
+          <div className="flex items-center justify-center h-[500px] lg:min-w-[800px] ml-auto relative">
             <div className="relative h-[100%] bg-amber- 100">
               <img
                 ref={imageRef}
@@ -398,7 +356,6 @@ const IPhoneConfigurator: React.FC = () => {
                 alt={`iPhone 17 in ${selectedColor}`}
                 className="h-full object-cover object-center flex-1"
                 onError={(e) => {
-                  // Fallback if image doesn't exist
                   console.log(
                     "Image not found:",
                     getImagePath(selectedColor, selectedOption)
